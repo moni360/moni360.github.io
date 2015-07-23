@@ -3,8 +3,8 @@
   <channel>
     <title>Moni blog</title>
     <description>Arduino, Raspberry pi, FPGA, Python, Androidなど趣くままに色々なことを</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://moni360.github.io/</link>
+    <atom:link href="https://moni360.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
         <title>Blogをカスタマイズする</title>
@@ -21,8 +21,8 @@
 わからないことだらけですが、習うより慣れよの精神でがんばりたいと思っています。&lt;/p&gt;
 </description>
         <pubDate>Thu, 23 Jul 2015 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/blog/2015/07/customize-blog/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2015/07/customize-blog/</guid>
+        <link>https://moni360.github.io/blog/2015/07/customize-blog/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/07/customize-blog/</guid>
       </item>
     
       <item>
@@ -30,8 +30,8 @@
         <description>&lt;p&gt;練習です。&lt;/p&gt;
 </description>
         <pubDate>Sun, 19 Jul 2015 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000/blog/2015/07/first-post/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2015/07/first-post/</guid>
+        <link>https://moni360.github.io/blog/2015/07/first-post/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/07/first-post/</guid>
       </item>
     
   </channel>
