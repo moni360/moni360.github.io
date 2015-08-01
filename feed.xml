@@ -10,8 +10,7 @@
         <title>Pandasで何かに白黒つけたい</title>
         <description>&lt;h2&gt;長い前置き&lt;/h2&gt;
 
-&lt;p&gt;こんにちは。ひきこもり動物園園長のMoniです。&lt;br&gt;
-プログラミング初心者で、基本的に独学なMoniは、自分のプログラミングに対する芯的な部分というか、バックグラウンド的なものがグラグラとしているという自覚があります。  &lt;/p&gt;
+&lt;p&gt;プログラミング初心者で、基本的に独学なMoniは、自分のプログラミングに対する芯的な部分というか、バックグラウンド的なものがグラグラとしているという自覚があります。  &lt;/p&gt;
 
 &lt;p&gt;私が好きな漫画家の福満しげゆき先生も何かの漫画の中で同じようなことを述べられていたと思います。&lt;br&gt;
 確か、自分という人間は基礎的な部分がグラグラしている、とかなんとか。&lt;br&gt;
@@ -182,16 +181,17 @@ plt.show()
 &lt;h2&gt;結果&lt;/h2&gt;
 
 &lt;p&gt;というわけで、結果です。&lt;br&gt;
-年俸が12球団最低で若い印象のdb軍と、年齢層高めの印象のd軍を表示してみました。&lt;br&gt;
-左がdbで右がdです。&lt;br&gt;
+年俸が12球団最低で若い印象のdb軍と、年齢層高めの印象のcd軍を表示してみました。
 db軍は選手としてノってくるであろう30手前の選手が最も多いことがわかります。&lt;br&gt;
-d軍は確かに40代の選手も多いですが、22〜24の選手も多いとわかります。これから期待できますね。  &lt;/p&gt;
+cd軍は確かに40代の選手も多いですが、22〜24の選手も多いとわかります。これから期待できますね。  &lt;/p&gt;
 
 &lt;div class=&quot;row&quot;&gt;
   &lt;div class=&quot;large-6 columns&quot;&gt;
+      DB軍
       &lt;img src=&quot;https://moni360.github.io/images/figure_db.png&quot;&gt;
   &lt;/div&gt;
   &lt;div class=&quot;large-6 columns&quot;&gt;
+      CD軍
       &lt;img src=&quot;https://moni360.github.io/images/figure_d.png&quot;&gt;
   &lt;/div&gt;
 &lt;/div&gt;
