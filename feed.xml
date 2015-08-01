@@ -7,6 +7,206 @@
     <atom:link href="https://moni360.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Pandasで何かに白黒つけたい</title>
+        <description>&lt;h2&gt;長い前置き&lt;/h2&gt;
+
+&lt;p&gt;こんにちは。ひきこもり動物園園長のMoniです。&lt;br&gt;
+プログラミング初心者で、基本的に独学なMoniは、自分のプログラミングに対する芯的な部分というか、バックグラウンド的なものがグラグラとしているという自覚があります。  &lt;/p&gt;
+
+&lt;p&gt;私が好きな漫画家の福満しげゆき先生も何かの漫画の中で同じようなことを述べられていたと思います。&lt;br&gt;
+確か、自分という人間は基礎的な部分がグラグラしている、とかなんとか。&lt;br&gt;
+エッセイでも似たタイトルのものを出されているみたいです。&lt;br&gt;
+&lt;a href=&quot;http://www.amazon.co.jp/%E3%82%B0%E3%83%A9%E3%82%B0%E3%83%A9%E3%81%AA%E7%A4%BE%E4%BC%9A%E3%81%A8%E3%82%B0%E3%83%A9%E3%82%B0%E3%83%A9%E3%81%AA%E5%83%95%E3%81%AE%E3%81%BE%E3%82%93%E3%81%8C%E9%81%93-%E7%A6%8F%E6%BA%80-%E3%81%97%E3%81%92%E3%82%86%E3%81%8D/dp/4845910489&quot;&gt;グラグラな社会とグラグラな僕のまんが道&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;当時大学生でモラトリアムを謳歌していた私は、その表現にとても共感してしまったものですが、いい大人な年齢になった今でも感覚はそんなに変わっていなくて、ふとした時に焦燥感を覚えています。&lt;br&gt;
+しかし、最近はいっそ、グラグラなことが自分のアイデンティティーなのかなと考えて開き直るようにしています（できる社会人のビジネス用語では、これを臭いものに蓋といいます）。  &lt;/p&gt;
+
+&lt;p&gt;さて、ちょうど先ほど、福満先生の&lt;a href=&quot;http://www.amazon.co.jp/%E3%81%86%E3%81%A1%E3%81%AE%E5%A6%BB%E3%81%A3%E3%81%A6%E3%81%A9%E3%81%86%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%EF%BC%9F-7-%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E7%A6%8F%E6%BA%80-%E3%81%97%E3%81%92%E3%82%86%E3%81%8D/dp/4575944475/ref=pd_sim_14_7?ie=UTF8&amp;amp;refRID=03A8T48D984VC4QPR2B2&quot;&gt;うちの妻ってどうでしょう？(7)（最終巻）&lt;/a&gt;を読んだのですが、
+この巻を最後に連載が全く無くなり失業状態になるそうなので、天地神明に誓ってステマの類ではないですが、
+みなさんも興味があったら福満先生の漫画を買ってあげてください。&lt;/p&gt;
+
+&lt;h2&gt;What&amp;#39;s Pandas？&lt;/h2&gt;
+
+&lt;p&gt;さて、だいぶ話が逸れましたがプログラグラミングの話をしましょう。&lt;br&gt;
+いや、私はプロではないのでグラグラミングになるのでしょうか。&lt;br&gt;
+とにかく、グラグラな私はプログラミング界隈に疎いのですが、Pythonでデータ分析を行う、PyDataというものが流行っているらしいと日課のネットサーフィンをしていたら小耳に挟んだのです。&lt;br&gt;
+なになに…データを扱うにはPandasというパッケージを使えばいい？他に必要なmatplotlibやnumpyなら学生時代に少し使ったことあるなあ…&lt;br&gt;
+とにかくデータ分析ってかっこいいし、Pandasについて勉強してみよう！  &lt;/p&gt;
+
+&lt;p&gt;ということで、公式にあるチュートリアルの&lt;a href=&quot;http://pandas.pydata.org/pandas-docs/stable/10min.html&quot;&gt;10 Minutes to pandas&lt;/a&gt;を読みました。&lt;/p&gt;
+
+&lt;h2&gt;何を分析するか&lt;/h2&gt;
+
+&lt;p&gt;なんでもいいのですが、最近プロ野球をよく観ているのでプロ野球のデータにしました。  &lt;/p&gt;
+
+&lt;p&gt;データの取得方法は、NPBのウェブページへのアクセスでhtmlから取得することにします。&lt;br&gt;
+データは各チームの選手の基本情報（名前、背番号、生年月日、etc.）を取ることにします。&lt;br&gt;
+アウトプットは、各球団の選手の年齢分布を表示することとします。&lt;/p&gt;
+
+&lt;h2&gt;コーディングする&lt;/h2&gt;
+
+&lt;p&gt;まず骨組みを考え、全体を2つの関数に分けることにしました。&lt;br&gt;
+・指定されたチームの選手データを取得し、DataFrame形式で返す。&lt;br&gt;
+・指定されたチームの全選手の満年齢をヒストグラム表示する。&lt;/p&gt;
+
+&lt;h4&gt;選手データ取得&lt;/h4&gt;
+
+&lt;p&gt;urllib2でhtmlを取得。&lt;br&gt;
+こんな感じで、引数で&amp;#39;db&amp;#39;とかのチーム名を入れて、各チームのデータを取得できるようにしておきました。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;req = urllib2.Request(&amp;#39;http://bis.npb.or.jp/teams/rst_%s.html&amp;#39; % team_name)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;HTMLの分析&lt;/h4&gt;
+
+&lt;p&gt;BeautifulSoupを使って分析をします。あったかい(略)&lt;br&gt;
+これも初めて使うので、&lt;a href=&quot;http://kondou.com/BS4/&quot;&gt;Beautiful Soup 4.2.0 Doc. 日本語訳&lt;/a&gt;を読みました。&lt;/p&gt;
+
+&lt;p&gt;まず、選手データがあるDivだけfindで抽出します。&lt;br&gt;
+次に、その中からfind&lt;em&gt;allで、全てのテーブルを検索します。&lt;br&gt;
+ここで、find&lt;/em&gt;allを使用した理由は、育成選手がいる場合、支配下選手とテーブルが分かれているからです。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;soup = BeautifulSoup(html)
+
+# HTMLから選手のテーブルの部分だけ抽出
+main_div = soup.find(&amp;#39;div&amp;#39;, id=&amp;#39;tedivmaintbl&amp;#39;)
+# すべてのtableタグを検索
+table_list = main_div.find_all(&amp;#39;table&amp;#39;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;次に、テーブルの子要素を読み、DataFrameに追加していきます。&lt;br&gt;
+for文でタグの子要素を取得するには、contentsとchildren属性を使う方法があるらしいです。
+contentsはリストで格納されていて、childrenはイテレータとのこと。&lt;br&gt;
+とりあえずcontentsを使いました。&lt;/p&gt;
+
+&lt;p&gt;ここで、よくわからなかったのが、contentsのリストの中にu&amp;quot;\n&amp;quot;というNavigableString objが入ってくることでした。
+邪魔なので、省くために、&lt;code&gt;from bs4 import element as bs4element&lt;/code&gt;としてBeautifulSoupからelementクラスをインポートしておいて、&lt;code&gt;isinstance(row, bs4element.Tag)&lt;/code&gt;で、Tag objのときだけ処理するようにしました（よい方法なのか不明）。&lt;/p&gt;
+
+&lt;p&gt;各行の要素は、&lt;code&gt;[x.string for x in row.contents]&lt;/code&gt;のようにリスト内包表記を使い、string要素だけ取得しました。&lt;/p&gt;
+
+&lt;p&gt;取得した行データをデータフレームに1行ずつ逐次追加したかったので、以下のようにappendメソッドを使いました。&lt;br&gt;
+リストのappendとは異なり、破壊的に追加されていくわけではないようです。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;s = pd.Series(data, index=header)
+df = df.append(s, ignore_index=True)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;全体は以下のような感じです。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;df = pd.DataFrame()
+for table in table_list:
+    for row in table.contents:
+        # 間に空行のNavigableString objが入ってくるのでTag objに絞る
+        if isinstance(row, bs4element.Tag):
+            if row[&amp;#39;class&amp;#39;][0] == &amp;#39;rosterMainHead&amp;#39;:
+                # ポジション名を保存しておく
+                position = row.find(&amp;#39;th&amp;#39;, class_=&amp;quot;rosterPos&amp;quot;).string
+                # テーブルをまとめて扱えるように列名を名前に変更
+                row.find(&amp;#39;th&amp;#39;, class_=&amp;quot;rosterPos&amp;quot;).string.replace_with(&amp;#39;Name&amp;#39;)
+                # 1列目にポジション列を追加
+                header = [&amp;#39;Position&amp;#39;] + [x.string for x in row.contents]
+            elif row[&amp;#39;class&amp;#39;][0] == &amp;#39;rosterPlayer&amp;#39;:
+                # 1列目にポジションを追加
+                data = [position] + [x.string for x in row.contents]
+                s = pd.Series(data, index=header)
+                df = df.append(s, ignore_index=True)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;データの成形&lt;/h4&gt;
+
+&lt;p&gt;データフレームに追加したデータは、dtypesでみると、全てオブジェクトタイプになっています。
+このままでは不便そうなのでいい感じに型を変換したいです。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;print df.dtypes
+# Name        object
+# No.         object
+# Position    object
+# 備考          object
+# 生年月日        object
+# 体重          object
+# 打           object
+# 投           object
+# 身長          object
+# dtype: object
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;身長、体重は数値に変換したいです。&lt;br&gt;
+astypeを使えばいいようです。&lt;br&gt;
+監督の身長・体重データは掲載されていないので、dropnaで省きます。&lt;br&gt;
+そもそも選手じゃないのでデータから消すべきかもしれませんが。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# 身長、体重の型を変換
+df[u&amp;#39;身長&amp;#39;] = df[u&amp;#39;身長&amp;#39;].dropna(how=&amp;#39;any&amp;#39;).astype(int)
+df[u&amp;#39;体重&amp;#39;] = df[u&amp;#39;体重&amp;#39;].dropna(how=&amp;#39;any&amp;#39;).astype(int)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;生年月日も計算で使用できるようにします。&lt;br&gt;
+初期状態ではYYYY.MM.DDの形式になっているので、YYYY-MM-DDになるように文字列置換してから、to_datetimeメソッドで変換します。&lt;br&gt;
+文字列データを取得するにはstrアクセサを使えばいいようです。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# 生年月日の型を変換
+df[u&amp;#39;生年月日&amp;#39;] = pd.to_datetime(df[u&amp;#39;生年月日&amp;#39;].str.replace(&amp;#39;.&amp;#39;, &amp;#39;-&amp;#39;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;投打は、統計に便利そうなのでカテゴリカルデータに変換します。
+身長・体重と同様に、投打も監督のデータは掲載されていないので、dropnaで省きます。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# 投打をカテゴリカルデータに変換
+df[u&amp;#39;投&amp;#39;] = df[u&amp;#39;投&amp;#39;].dropna(how=&amp;#39;any&amp;#39;).astype(&amp;#39;category&amp;#39;)
+df[u&amp;#39;打&amp;#39;] = df[u&amp;#39;打&amp;#39;].dropna(how=&amp;#39;any&amp;#39;).astype(&amp;#39;category&amp;#39;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで以下のような型になりました。&lt;br&gt;
+なぜか、intを指定した身長・体重がfloat64になっていますが。。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;print df.dtypes
+Name                object
+No.                 object
+Position            object
+備考                  object
+生年月日        datetime64[ns]
+体重                 float64
+打                 category
+投                 category
+身長                 float64
+dtype: object
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;データのプロット&lt;/h4&gt;
+
+&lt;p&gt;さて、ようやくまとめたデータを使う段階に入ることができました。&lt;br&gt;
+いま一度わたしの野望を思い出してみますと、目標は各球団の選手の年齢分布を表示することでした。&lt;/p&gt;
+
+&lt;p&gt;選手の満年齢を計算します。
+生年月日から満年齢を計算するには閏年とかあるし、一体わたしどうしたらいいの〜？と思っておググりましたところ、下記のような記事が見つかりました。&lt;br&gt;
+&lt;a href=&quot;http://s0hno.net/archives/109&quot;&gt;閏年も考えた上での年齢の計算方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;年月日をくっつけてint型として、(今日の日付-生年月日)/10000して小数点を切り捨てればいいと。&lt;br&gt;
+な〜るほど！&lt;br&gt;
+せっかく日付をdatetime型にしたのに〜(＞＜)と思いながら以下のように書きました。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# 現在の年月日をintで
+t = int(pd.tslib.Timestamp.now().strftime(&amp;#39;%Y%m%d&amp;#39;))
+# 選手の満年齢を求める
+year = df[u&amp;#39;生年月日&amp;#39;].apply(lambda x: math.floor((t - int(x.strftime(&amp;#39;%Y%m%d&amp;#39;)))/10000))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;このデータをヒストグラムでプロットします。&lt;br&gt;
+&lt;code&gt;kind=&amp;#39;hist&amp;#39;&lt;/code&gt;でヒストグラムになります。
+binsはバーの数、alphaは透明度、colorはバーの色です。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# ヒストグラムをプロットして表示
+year.plot(kind=&amp;#39;hist&amp;#39;, bins=20, alpha=0.5, color=&amp;#39;b&amp;#39;, xlim=(15, 50), ylim=(0, 15))
+plt.show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;結果&lt;/h2&gt;
+
+&lt;p&gt;というわけで、結果です。&lt;br&gt;
+年俸が12球団最低で若い印象のdb軍と、年齢層高めの印象のd軍を表示してみました。&lt;br&gt;
+左がdbで右がdです。&lt;br&gt;
+db軍は選手としてノってくるであろう30手前の選手が最も多いことがわかります。&lt;br&gt;
+d軍は確かに40代の選手も多いですが、22〜24の選手も多いとわかります。これから期待できますね。  &lt;/p&gt;
+
+&lt;div class=&quot;row&quot;&gt;
+  &lt;div class=&quot;large-6 columns&quot;&gt;
+      &lt;img src=&quot;https://moni360.github.io/images/figure_db.png&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;large-6 columns&quot;&gt;
+      &lt;img src=&quot;https://moni360.github.io/images/figure_d.png&quot;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;さて、何かに白黒つけることはできたのでしょうか。&lt;br&gt;
+また今度、もう少し有意義な分析もしてみたいです。&lt;/p&gt;
+
+&lt;p&gt;今回のコードは以下です。&lt;br&gt;
+&lt;a href=&quot;https://gist.github.com/moni360/b688c8c8d365b003d977&quot;&gt;plot_hist.py&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Aug 2015 00:00:00 +0900</pubDate>
+        <link>https://moni360.github.io/blog/2015/08/studying-pandas-1/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/08/studying-pandas-1/</guid>
+      </item>
+    
+      <item>
         <title>Blogをカスタマイズする</title>
         <description>&lt;p&gt;ブログを始めてみたものの、なかなか記事が書けません。&lt;br&gt;
 かっこよく、有用なTipsとか書いてみたいと思っていたのですが、毎日の仕事に全力投球してしまうので、帰宅する頃には精魂尽きてしまうのです。 &lt;/p&gt;
