@@ -7,6 +7,174 @@
     <atom:link href="https://moni360.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>仕事でよく使うWindowsバッチファイルのあれこれ</title>
+        <description>&lt;hr&gt;
+
+&lt;p&gt;お盆休みです。&lt;br&gt;
+仕事のトラブル？みんな忘れてしまえ〜☆（ゝω・）vｷｬﾋﾟ&lt;br&gt;
+暑さが続き、朦朧とした頭の周りを、甘い言葉を囁く妖精が飛び回る夕暮れ。&lt;/p&gt;
+
+&lt;p&gt;そろそろ買い物にでも行こうと思うのですが、そんな私のココロとは正反対に、火照ったカラダは冷房を求め、繰り返す快楽の波に溺れるうちに、私は堕落させられていくのです。ハァハァ。  &lt;/p&gt;
+
+&lt;p&gt;さて、、、買い物に行く前に、今回は、仕事でよく使うバッチファイルのコマンドや書き方等を自分用にまとめたいと思います。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;バッチファイルのあるディレクトリに移動する&lt;/h3&gt;
+
+&lt;p&gt;例えば、バッチファイルとexeを合わせて配布し、バッチファイルはそのexeを呼び出すものとします。&lt;br&gt;
+バッチ内にフルパスでexeの場所を書いてしまうと、バッチとexeの置く場所を変更した場合に悲しいことが起きてしまいます。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;rem exeのある場所に移動!!
+cd /d C:\hogehoge\fugafuga
+piyopiyo.exe
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;下記のように書くと、バッチのあるディレクトリに移動してくれるので便利です。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd /d %~dp0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;/d はドライブ間の移動があるときのオプションですね。&lt;br&gt;
+%~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。&lt;/p&gt;
+
+&lt;p&gt;|    | 意味 |
+|:---|:-----------|
+| %0 | 実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (&amp;quot;) で囲まれている。 |
+| ~  | 引用句(&amp;quot;)を削除する。 |
+| d  | ディスク名だけにする。 |
+| p  | パス名だけにする。 |&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;コマンドを非表示にする&lt;/h3&gt;
+
+&lt;p&gt;コマンドプロンプトに、表示させたい文字列以外が表示されてしまうと、見にくいし、カッコ悪いです。&lt;br&gt;
+下記のようにすると、以降のコマンドはコマンドプロンプトに表示されなくなります。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;@echo off
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;@をコマンドの頭につけるとそのコマンドは非表示になります。&lt;br&gt;
+また、echo offをつけると、それ以降のコマンドは非表示になります。&lt;br&gt;
+単にecho offとだけ記述すると、それ以降は非表示になりますが、echo offというコマンドは表示されてしまうので、@をつけてそれ自体も表示されないようにします。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;ループ処理&lt;/h3&gt;
+
+&lt;p&gt;for文等もあるのですが、私はいつもラベルとgotoを使用しています。&lt;br&gt;
+下記は何かの処理を100回実行する例です。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set /a i=0
+set /a max=100
+
+:loop_start
+    if %i% gtr %max% goto loop_end
+    rem 何かの処理
+    set /a i=i+1
+    goto loop_start
+:loop_end
+exit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ついでに、バッチの比較演算子をまとめておきましょう。&lt;br&gt;
+数値の比較は以下の演算子で行います。  &lt;/p&gt;
+
+&lt;p&gt;|演算子| 意味         |
+|:----|:------------|
+|equ  |等しい
+|neq  |等しくない
+|lss  |～より小さい( &amp;lt; )
+|leq  |～以下( &amp;lt;= )
+|gtr  |～より大きい( &amp;gt; )
+|geq  |～以上( &amp;gt;= )&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;ディレクトリを作成する&lt;/h3&gt;
+
+&lt;p&gt;ディレクトリを作成するときに、同名のディレクトリが存在するか確認して、作成します。&lt;br&gt;
+existを使います。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set dirname=test
+if not exist %dirname% (mkdir %dirname%)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h3&gt;実行したコマンドの結果を取得する&lt;/h3&gt;
+
+&lt;p&gt;バッチで実行したコマンドの処理結果を参照しようとするのはなかなかトリッキーです。&lt;br&gt;
+結果から書くと、下記のように記述します。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set result=
+for /f %i in (&amp;#39;hogehoge.exe&amp;#39;) do set result=%i
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;/fオプションはfor文でファイル解析を行うオプションです。&lt;br&gt;
+for文でシングルクォート(&amp;#39;)で囲まれたコマンドを実行した結果をiに格納します。&lt;br&gt;
+そして、doで変数resultに代入しています。&lt;/p&gt;
+
+&lt;p&gt;この結果をif等で利用すれば、コマンドの結果により、処理を切り替えられます。&lt;br&gt;
+私の場合は、何らかの期待値と比較するexeを作成して、正常動作の判断を実施し、OKなら次のコマンドを実行、NGならシャットダウンなどの用途で使用しています。  &lt;/p&gt;
+
+&lt;p&gt;また、下記のように、&amp;quot;usebackq&amp;quot;オプションを使用すれば、コマンドをバッククォート(`)で囲むこともできます。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set result=
+for /f &amp;quot;usebackq&amp;quot; %i in (`hogehoge.exe`) do set result=%i
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h3&gt;指定した秒数待つ&lt;/h3&gt;
+
+&lt;p&gt;timeoutを使います。引数で指定した秒数、処理を停止します。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;timeout 100
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;実行すると、残りの時間が表示されるのですが、何も表示させたくない場合は下記のようにnulデバイスにリダイレクトします。&lt;br&gt;
+&lt;code&gt;
+timeout 100 &amp;gt; nul
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;シャットダウンする&lt;/h3&gt;
+
+&lt;p&gt;shutdownを使います。  &lt;/p&gt;
+
+&lt;p&gt;以下のように書くと、直ちにシャットダウンが開始されます。
+&lt;code&gt;
+shutdown -s -t 0
+&lt;/code&gt;
+シャットダウンをする時間を遅らせたい場合は、-tの後の0を変更します。単位は秒です。  &lt;/p&gt;
+
+&lt;p&gt;リブートする場合は、-sを-rに変えます。
+&lt;code&gt;
+shutdown -r -t 0
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;バッチから別のバッチを実行する（同一ウィンドウ）&lt;/h3&gt;
+
+&lt;p&gt;callを使います。&lt;br&gt;
+callを使用しないで、&lt;code&gt;hogehoge.bat&lt;/code&gt;とだけ記述すると、そこで呼び出し元のバッチファイルの処理が終了してしまいます。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;call hogehoge.bat
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h3&gt;バッチから別のバッチを実行する（別ウィンドウ）&lt;/h3&gt;
+
+&lt;p&gt;startを使います。&lt;br&gt;
+新しいウィンドウが開き、呼び出したバッチの処理は、そこで実行されます。&lt;br&gt;
+並列処理をさせたい場合に便利。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;start hogehoge.bat
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;新しいウィンドウを表示させたくない（バックグラウンドでの処理としたい）場合、/bオプションをつけます。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;start /b hogehoge.bat
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ただし、バックグラウンドで開始させてしまうと、終了にはタスクマネージャー等でプロセスを終了させるしかなくなります。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;さて、だいたいこんなところでしょうか。&lt;br&gt;
+また思い出したら随時書き足していきたいと思います。&lt;br&gt;
+最近はpowershellなんてものもあるので、複雑な処理が書きたかったらそっちでやれって感じですかね。&lt;br&gt;
+お疲れ様でした。  &lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Aug 2015 00:00:00 +0900</pubDate>
+        <link>https://moni360.github.io/blog/2015/08/windows-bat-memo/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/08/windows-bat-memo/</guid>
+      </item>
+    
+      <item>
         <title>Pandasで何かに白黒つけたい</title>
         <description>&lt;h2&gt;長い前置き&lt;/h2&gt;
 
