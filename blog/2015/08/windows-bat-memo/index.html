@@ -2,7 +2,7 @@
 cd /d C:\hogehoge\fugafuga
 piyopiyo.exe
 </code></pre></div> <p>下記のように書くと、バッチのあるディレクトリに移動してくれるので便利です。</p> <div class="highlight"><pre><code class="language-text" data-lang="text">cd /d %~dp0
-</code></pre></div> <p>/d はドライブ間の移動があるときのオプションですね。<br> %~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。</p> <p>| | 意味 | |:---|:-----------| | %0 | 実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (&quot;) で囲まれている。 | | ~ | 引用句(&quot;)を削除する。 | | d | ディスク名だけにする。 | | p | パス名だけにする。 |</p> <hr> <h3>コマンドを非表示にする</h3> <p>コマンドプロンプトに、表示させたい文字列以外が表示されてしまうと、見にくいし、カッコ悪いです。<br> 下記のようにすると、以降のコマンドはコマンドプロンプトに表示されなくなります。</p> <div class="highlight"><pre><code class="language-text" data-lang="text">@echo off
+</code></pre></div> <p>/d はドライブ間の移動があるときのオプションですね。<br> %~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。<br> 何とも奇怪ですね。</p> <table> <caption>%~dp0の意味</caption> <colgroup> </colgroup> <thead> <tr> <th></th> <th>意味</th> </tr> </thead> <tbody> <tr> <td>%0</td> <td>実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (") で囲まれている。</td> </tr> <tr> <td>~</td> <td>引用句(")を削除する。</td> </tr> <tr> <td>d</td> <td>ディスク名だけにする。</td> </tr> <tr> <td>p</td> <td>パス名だけにする。</td> </tr> </table> <hr> <h3>コマンドを非表示にする</h3> <p>コマンドプロンプトに、表示させたい文字列以外が表示されてしまうと、見にくいし、カッコ悪いです。<br> 下記のようにすると、以降のコマンドはコマンドプロンプトに表示されなくなります。</p> <div class="highlight"><pre><code class="language-text" data-lang="text">@echo off
 </code></pre></div> <p>@をコマンドの頭につけるとそのコマンドは非表示になります。<br> また、echo offをつけると、それ以降のコマンドは非表示になります。<br> 単にecho offとだけ記述すると、それ以降は非表示になりますが、echo offというコマンドは表示されてしまうので、@をつけてそれ自体も表示されないようにします。 </p> <hr> <h3>ループ処理</h3> <p>for文等もあるのですが、私はいつもラベルとgotoを使用しています。<br> 下記は何かの処理を100回実行する例です。 </p> <div class="highlight"><pre><code class="language-text" data-lang="text">set /a i=0
 set /a max=100
 
@@ -13,7 +13,7 @@ set /a max=100
     goto loop_start
 :loop_end
 exit
-</code></pre></div> <p>ついでに、バッチの比較演算子をまとめておきましょう。<br> 数値の比較は以下の演算子で行います。 </p> <p>|演算子| 意味 | |:----|:------------| |equ |等しい |neq |等しくない |lss |～より小さい( &lt; ) |leq |～以下( &lt;= ) |gtr |～より大きい( &gt; ) |geq |～以上( &gt;= )</p> <hr> <h3>ディレクトリを作成する</h3> <p>ディレクトリを作成するときに、同名のディレクトリが存在するか確認して、作成します。<br> existを使います。 </p> <div class="highlight"><pre><code class="language-text" data-lang="text">set dirname=test
+</code></pre></div> <p>ついでに、バッチの比較演算子をまとめておきましょう。<br> 数値の比較は以下の演算子で行います。 </p> <table> <caption>数値比較演算子</caption> <colgroup> </colgroup> <thead> <tr> <th>演算子</th> <th>意味</th> </tr> </thead> <tbody> <tr> <td>equ</td> <td>等しい</td> </tr> <tr> <td>neq</td> <td>等しくない</td> </tr> <tr> <td>lss</td> <td>より小さい( < )</td> </tr> <tr> <td>leq</td> <td>以下( <= )</td> </tr> <tr> <td>gtr</td> <td>より大きい( > )</td> </tr> <tr> <td>geq</td> <td>以上( >= )</td> </tr> </table> <hr> <h3>ディレクトリを作成する</h3> <p>ディレクトリを作成するときに、同名のディレクトリが存在するか確認して、作成します。<br> existを使います。 </p> <div class="highlight"><pre><code class="language-text" data-lang="text">set dirname=test
 if not exist %dirname% (mkdir %dirname%)
 </code></pre></div> <hr> <h3>実行したコマンドの結果を取得する</h3> <p>バッチで実行したコマンドの処理結果を参照しようとするのはなかなかトリッキーです。<br> 結果から書くと、下記のように記述します。 </p> <div class="highlight"><pre><code class="language-text" data-lang="text">set result=
 for /f %i in (&#39;hogehoge.exe&#39;) do set result=%i

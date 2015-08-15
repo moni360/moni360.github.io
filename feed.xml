@@ -32,14 +32,37 @@ piyopiyo.exe
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd /d %~dp0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;/d はドライブ間の移動があるときのオプションですね。&lt;br&gt;
-%~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。&lt;/p&gt;
+%~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。&lt;br&gt;
+何とも奇怪ですね。&lt;/p&gt;
 
-&lt;p&gt;|    | 意味 |
-|:---|:-----------|
-| %0 | 実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (&amp;quot;) で囲まれている。 |
-| ~  | 引用句(&amp;quot;)を削除する。 |
-| d  | ディスク名だけにする。 |
-| p  | パス名だけにする。 |&lt;/p&gt;
+&lt;table&gt;
+  &lt;caption&gt;%~dp0の意味&lt;/caption&gt;
+  &lt;colgroup&gt;
+  &lt;/colgroup&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;意味&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%0&lt;/td&gt;
+      &lt;td&gt;実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (&quot;) で囲まれている。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;~&lt;/td&gt;
+      &lt;td&gt;引用句(&quot;)を削除する。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;d&lt;/td&gt;
+      &lt;td&gt;ディスク名だけにする。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;p&lt;/td&gt;
+      &lt;td&gt;パス名だけにする。&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
 
 &lt;hr&gt;
 
@@ -73,14 +96,42 @@ exit
 &lt;p&gt;ついでに、バッチの比較演算子をまとめておきましょう。&lt;br&gt;
 数値の比較は以下の演算子で行います。  &lt;/p&gt;
 
-&lt;p&gt;|演算子| 意味         |
-|:----|:------------|
-|equ  |等しい
-|neq  |等しくない
-|lss  |～より小さい( &amp;lt; )
-|leq  |～以下( &amp;lt;= )
-|gtr  |～より大きい( &amp;gt; )
-|geq  |～以上( &amp;gt;= )&lt;/p&gt;
+&lt;table&gt;
+  &lt;caption&gt;数値比較演算子&lt;/caption&gt;
+  &lt;colgroup&gt;
+  &lt;/colgroup&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;演算子&lt;/th&gt;
+      &lt;th&gt;意味&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;equ&lt;/td&gt;
+      &lt;td&gt;等しい&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;neq&lt;/td&gt;
+      &lt;td&gt;等しくない&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;lss&lt;/td&gt;
+      &lt;td&gt;より小さい( &lt; )&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;leq&lt;/td&gt;
+      &lt;td&gt;以下( &lt;= )&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;gtr&lt;/td&gt;
+      &lt;td&gt;より大きい( &gt; )&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;geq&lt;/td&gt;
+      &lt;td&gt;以上( &gt;= )&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
 
 &lt;hr&gt;
 
