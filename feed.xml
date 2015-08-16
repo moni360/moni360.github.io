@@ -180,17 +180,14 @@ timeout 100 &amp;gt; nul
 
 &lt;p&gt;shutdownを使います。  &lt;/p&gt;
 
-&lt;p&gt;以下のように書くと、直ちにシャットダウンが開始されます。
-&lt;code&gt;
-shutdown -s -t 0
-&lt;/code&gt;
-シャットダウンをする時間を遅らせたい場合は、-tの後の0を変更します。単位は秒です。  &lt;/p&gt;
+&lt;p&gt;以下のように書くと、直ちにシャットダウンが開始されます。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;shutdown -s -t 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;シャットダウンをする時間を遅らせたい場合は、-tの後の0を変更します。単位は秒です。  &lt;/p&gt;
 
-&lt;p&gt;リブートする場合は、-sを-rに変えます。
-&lt;code&gt;
-shutdown -r -t 0
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;p&gt;リブートする場合は、-sを-rに変えます。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;shutdown -r -t 0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 
 &lt;h3&gt;バッチから別のバッチを実行する（同一ウィンドウ）&lt;/h3&gt;
