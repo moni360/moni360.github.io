@@ -32,23 +32,27 @@ piyopiyo.exe
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd /d %~dp0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;/d はドライブ間の移動があるときのオプションですね。&lt;br&gt;
-%~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものということです。&lt;br&gt;
-何とも奇怪ですね。&lt;/p&gt;
+%~dp0は、いつもよくわからないまま使っていましたが、バッチのフルパスを表す%0の引数にオプションをつけたものだそうです。&lt;br&gt;
+何とも奇怪ですね。  &lt;/p&gt;
+
+&lt;p&gt;~は引用句(&amp;quot;)の削除を表し、dはドライブ名、pはパス名を表すので、%0からファイル名と拡張子を除いたものになるということです。&lt;br&gt;
+ちなみに、nがファイル名、xが拡張子を表します。&lt;br&gt;
+ここまでをまとめたのが、以下の表です。&lt;/p&gt;
 
 &lt;table&gt;
-  &lt;caption&gt;%~dp0の意味&lt;/caption&gt;
+  &lt;caption&gt;引数に使用されるオプション&lt;/caption&gt;
   &lt;colgroup&gt;
   &lt;/colgroup&gt;
   &lt;thead&gt;
     &lt;tr&gt;
-      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;オプション&lt;/th&gt;
       &lt;th&gt;意味&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;td&gt;%0&lt;/td&gt;
-      &lt;td&gt;実行するバッチファイルのフルパス名。Cで言うargv[0]のようなもの。スペース等が入っていることもあるので引用句 (&quot;) で囲まれている。&lt;/td&gt;
+      &lt;td&gt;%n (n:0~9)&lt;/td&gt;
+      &lt;td&gt;引数が入る特殊な変数。Cで言うargv[n]のようなもの。スペース等が入っていることもあるので引用句(&quot;)で囲まれている。&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;~&lt;/td&gt;
@@ -56,11 +60,19 @@ piyopiyo.exe
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;d&lt;/td&gt;
-      &lt;td&gt;ディスク名だけにする。&lt;/td&gt;
+      &lt;td&gt;ドライブ名だけ抽出。&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;p&lt;/td&gt;
-      &lt;td&gt;パス名だけにする。&lt;/td&gt;
+      &lt;td&gt;パス名だけ抽出。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;n&lt;/td&gt;
+      &lt;td&gt;ファイル名だけ抽出。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;x&lt;/td&gt;
+      &lt;td&gt;拡張子だけ抽出。&lt;/td&gt;
     &lt;/tr&gt;
 &lt;/table&gt;
 
@@ -146,21 +158,30 @@ if not exist %dirname% (mkdir %dirname%)
 
 &lt;h3&gt;実行したコマンドの結果を取得する&lt;/h3&gt;
 
-&lt;p&gt;バッチで実行したコマンドの処理結果を参照しようとするのはなかなかトリッキーです。&lt;br&gt;
+&lt;p&gt;実行したコマンドの結果を参照して、処理を分岐させたいことなどがあると思います。
+簡単そうですが、バッチではなかなか複雑で、忘れがちです。&lt;br&gt;
 結果から書くと、下記のように記述します。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set result=
-for /f %i in (&amp;#39;hogehoge.exe&amp;#39;) do set result=%i
+for /f %%i in (&amp;#39;hogehoge.exe&amp;#39;) do set result=%%i
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;/fオプションはfor文でファイル解析を行うオプションです。&lt;br&gt;
 for文でシングルクォート(&amp;#39;)で囲まれたコマンドを実行した結果をiに格納します。&lt;br&gt;
-そして、doで変数resultに代入しています。&lt;/p&gt;
+そして、doで変数resultに代入しています。  &lt;/p&gt;
 
 &lt;p&gt;この結果をif等で利用すれば、コマンドの結果により、処理を切り替えられます。&lt;br&gt;
-私の場合は、何らかの期待値と比較するexeを作成して、正常動作の判断を実施し、OKなら次のコマンドを実行、NGならシャットダウンなどの用途で使用しています。  &lt;/p&gt;
-
+私の場合は、何らかの期待値と比較するexeを作成して、例えば、以下のように、結果をパイプでfindに渡し、&amp;quot;ERROR&amp;quot;という文字列が含まれるかどうかを調べます。&lt;br&gt;
+resultが空のままであればOK、何か入っていればNGとなります。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set result=
+for /f %%i in (&amp;#39;hogehoge.exe ^| find &amp;quot;ERROR&amp;quot;&amp;#39;) do set result=%%i
+if &amp;quot;result&amp;quot;==&amp;quot;&amp;quot; (
+    echo OKの処理
+) else (
+    echo NGの処理
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;また、下記のように、&amp;quot;usebackq&amp;quot;オプションを使用すれば、コマンドをバッククォート(`)で囲むこともできます。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set result=
-for /f &amp;quot;usebackq&amp;quot; %i in (`hogehoge.exe`) do set result=%i
+for /f &amp;quot;usebackq&amp;quot; %%i in (`hogehoge.exe`) do set result=%%i
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 
@@ -205,7 +226,7 @@ callを使用しないで、&lt;code&gt;hogehoge.bat&lt;/code&gt;とだけ記述
 並列処理をさせたい場合に便利。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;start hogehoge.bat
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;新しいウィンドウを表示させたくない（バックグラウンドでの処理としたい）場合、/bオプションをつけます。&lt;/p&gt;
+&lt;p&gt;新しいウィンドウを表示させたくない（バックグラウンドでの処理としたい）場合、/bオプションをつけます。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;start /b hogehoge.bat
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;ただし、バックグラウンドで開始させてしまうと、終了にはタスクマネージャー等でプロセスを終了させるしかなくなります。  &lt;/p&gt;
@@ -214,8 +235,8 @@ callを使用しないで、&lt;code&gt;hogehoge.bat&lt;/code&gt;とだけ記述
 
 &lt;p&gt;さて、だいたいこんなところでしょうか。&lt;br&gt;
 また思い出したら随時書き足していきたいと思います。&lt;br&gt;
-最近はpowershellなんてものもあるので、複雑な処理が書きたかったらそっちでやれって感じですかね。&lt;br&gt;
-お疲れ様でした。  &lt;/p&gt;
+最近はpowershellなんてものもあるので、複雑な処理が書きたかったらそっちでやった方がカンタンですね。&lt;br&gt;
+それでは、買い物に行ってきます。  &lt;/p&gt;
 </description>
         <pubDate>Sun, 16 Aug 2015 00:00:00 +0900</pubDate>
         <link>https://moni360.github.io/blog/2015/08/windows-bat-memo/</link>
