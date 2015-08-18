@@ -23,7 +23,7 @@
 &lt;h3&gt;バッチファイルのあるディレクトリに移動する&lt;/h3&gt;
 
 &lt;p&gt;例えば、バッチファイルとexeを合わせて配布し、バッチファイルはそのexeを呼び出すものとします。&lt;br&gt;
-バッチ内にフルパスでexeの場所を書いてしまうと、バッチとexeの置く場所を変更した場合に悲しいことが起きてしまいます。
+バッチ内にフルパスでexeの場所を書いてしまうと、バッチとexeの置く場所を変更した場合に悲しいことが起きてしまいます。&lt;br&gt;
 フルパスで書くなんて、そんなはしたないことしませんわ、とお思いの方もいるかもしれませんが、けっこう「このディレクトリにおいてください」というバッチを見るんです。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;rem exeのある場所に移動!!
 cd /d C:\hogehoge\fugafuga
