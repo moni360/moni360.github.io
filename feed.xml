@@ -23,12 +23,13 @@
 &lt;h3&gt;バッチファイルのあるディレクトリに移動する&lt;/h3&gt;
 
 &lt;p&gt;例えば、バッチファイルとexeを合わせて配布し、バッチファイルはそのexeを呼び出すものとします。&lt;br&gt;
-バッチ内にフルパスでexeの場所を書いてしまうと、バッチとexeの置く場所を変更した場合に悲しいことが起きてしまいます。&lt;/p&gt;
+バッチ内にフルパスでexeの場所を書いてしまうと、バッチとexeの置く場所を変更した場合に悲しいことが起きてしまいます。
+フルパスで書くなんて、そんなはしたないことしませんわ、とお思いの方もいるかもしれませんが、けっこう「このディレクトリにおいてください」というバッチを見るんです。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;rem exeのある場所に移動!!
 cd /d C:\hogehoge\fugafuga
 piyopiyo.exe
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;下記のように書くと、バッチのあるディレクトリに移動してくれるので便利です。&lt;/p&gt;
+&lt;p&gt;バッチの最初で、下記のように書くと、バッチのあるディレクトリに移動してくれるので、後は相対パスで記述すればOKです。&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cd /d %~dp0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;/d はドライブ間の移動があるときのオプションですね。&lt;br&gt;
@@ -100,7 +101,7 @@ set /a max=100
 :loop_start
     if %i% gtr %max% goto loop_end
     rem 何かの処理
-    set /a i=i+1
+    set /a i+=1
     goto loop_start
 :loop_end
 exit
@@ -149,7 +150,7 @@ exit
 
 &lt;h3&gt;ディレクトリを作成する&lt;/h3&gt;
 
-&lt;p&gt;ディレクトリを作成するときに、同名のディレクトリが存在するか確認して、作成します。&lt;br&gt;
+&lt;p&gt;ディレクトリを作成するときに、同名のディレクトリが存在するか確認してから作成します。&lt;br&gt;
 existを使います。  &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;set dirname=test
 if not exist %dirname% (mkdir %dirname%)
