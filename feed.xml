@@ -7,6 +7,106 @@
     <atom:link href="https://moni360.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>バッチで日付と時刻を取得する</title>
+        <description>&lt;hr&gt;
+
+&lt;p&gt;近所の横浜スタジアムでは、横浜DeNAベイスターズ夏の一大イベント、YOKOHAMA STAR NIGHT 2015が開催されているみたいです。&lt;br&gt;
+特別なユニフォームを来場者全員に配布するというイベントなのですが、今年はなかなか人気があり、チケットを取るのが難しかったようです。  &lt;/p&gt;
+
+&lt;p&gt;各球団、最近は、色々とファンサービスに力を入れているようですね。&lt;br&gt;
+同じユニフォーム配布系のイベントだと、ジャイアンツは橙魂、ホークスは鷹の祭典なんて名前みたいですね。&lt;br&gt;
+ドラゴンズは昇竜という名前のようですが、来年からは、スターナイトに習って、ドラゴンナイトというのはどうでしょうか？&lt;br&gt;
+ドラゴンナイトのキャッチコピーも考えてみました！  &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Nagoya Dragon Night　〜今宵、俺たちは友達のように歌うだろう〜&lt;/strong&gt;  &lt;/p&gt;
+
+&lt;p&gt;何行もかけて、これが言いたかっただけですね！  &lt;/p&gt;
+
+&lt;p&gt;さて、本題に入ります。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;言語環境によらずに日付と時刻を取得する&lt;/h3&gt;
+
+&lt;p&gt;ログを取るバッチを作成したときなど、日付と時刻をフォルダ名やファイル名に使用したい場合があると思います。&lt;br&gt;
+そんなときに、日付と時刻を取得する方法について説明します。&lt;br&gt;
+また、日本語環境と英語環境での違いによらず、取得できるようにしています。  &lt;/p&gt;
+
+&lt;p&gt;全体は下記のようになっています。&lt;br&gt;
+これを拡張子.batとして保存して、ダブルクリックすると、日付と時間が&amp;quot;-&amp;quot;で区切られて表示されるはずです。  &lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/moni360/4e86ca676d1a7bd93cd5.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;各行を説明します。  &lt;/p&gt;
+
+&lt;p&gt;3行目でNOWというサブルーチンに入ります。&lt;br&gt;
+8〜47行目のサブルーチンの中で、YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDという変数に現在の日付と時刻が格納されるので、
+サブルーチンを抜けて4、5行目のechoで表示します。  &lt;/p&gt;
+
+&lt;p&gt;サブルーチンの11〜20行目では、日付のフォーマットから、PCの言語環境を判断します。&lt;br&gt;
+私の知っている限り、Windowsの日付のフォーマットは下表の4つがあります。&lt;br&gt;
+それぞれ、&amp;quot;/&amp;quot;の位置が異なるので、判断は&amp;quot;/&amp;quot;の位置で行うことにしました。  &lt;/p&gt;
+
+&lt;table&gt;
+  &lt;caption&gt;日付のフォーマット&lt;/caption&gt;
+  &lt;colgroup&gt;
+  &lt;/colgroup&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;言語&lt;/th&gt;
+      &lt;th&gt;フォーマット&lt;/th&gt;
+      &lt;th&gt;&quot;/&quot;の位置（前から数えた場合）&lt;/th&gt;
+      &lt;th&gt;&quot;/&quot;の位置（後ろから数えた場合）&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;日本語1&lt;/td&gt;
+      &lt;td&gt;2015/08/20&lt;/td&gt;
+      &lt;td&gt;4, 7&lt;/td&gt;
+      &lt;td&gt;3, 6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;日本語2&lt;/td&gt;
+      &lt;td&gt;木 2015/08/20&lt;/td&gt;
+      &lt;td&gt;6, 9&lt;/td&gt;
+      &lt;td&gt;3, 6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;英語1&lt;/td&gt;
+      &lt;td&gt;Thu 08/20/2015&lt;/td&gt;
+      &lt;td&gt;6, 9&lt;/td&gt;
+      &lt;td&gt;5, 8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;英語2&lt;/td&gt;
+      &lt;td&gt;08/20/2015 Thu&lt;/td&gt;
+      &lt;td&gt;2, 5&lt;/td&gt;
+      &lt;td&gt;9, 12&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;後ろから3文字目が&amp;quot;/&amp;quot;なら、日本語(YYYY/MM/DDの並び)と判断します。&lt;br&gt;
+さらに、後ろから10文字を切り出し、YYYY/MM/DDの部分だけを抽出します。&lt;br&gt;
+後ろから5文字目が&amp;quot;/&amp;quot;なら、英語(MM/DD/YYYYの並び)として、前から5文字目から最後までを切り出し、MM/DD/YYYYの部分だけを抽出します。&lt;br&gt;
+それ以外なら、英語(MM/DD/YYYYの並び)として、最後の4文字を除き、MM/DD/YYYYの部分だけを抽出します。  &lt;/p&gt;
+
+&lt;p&gt;22〜30行目で、日本語/英語で場合分けして、抽出した文字列（YYYY/MM/DDまたはMM/DD/YYYY）を切り出して、変数YEAR, MONTH, DAYに格納します。  &lt;/p&gt;
+
+&lt;p&gt;32〜36行目では、時刻を取得します。&lt;br&gt;
+ポイントは、0~9時までは、&amp;quot; 9:00:00.00&amp;quot;のようにスペースが入るので、スペースを0で置換している点です。  &lt;/p&gt;
+
+&lt;p&gt;9行目でsetlocalを宣言し、サブルーチン内の変数をローカル変数としていたため、最後に38〜45行目で、endlocalの宣言と日付、時刻の切り出して格納した変数を外部で使用できるようにしています。&lt;br&gt;
+これで、外部からYEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDの変数が使用できるようになりました。  &lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 20 Aug 2015 00:00:00 +0900</pubDate>
+        <link>https://moni360.github.io/blog/2015/08/windows-bat-date-and-time/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/08/windows-bat-date-and-time/</guid>
+      </item>
+    
+      <item>
         <title>仕事でよく使うWindowsバッチファイルのあれこれ</title>
         <description>&lt;hr&gt;
 
