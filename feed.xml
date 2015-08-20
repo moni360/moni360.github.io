@@ -14,7 +14,7 @@
 特別なユニフォームを来場者全員に配布するというイベントなのですが、今年はなかなか人気があり、チケットを取るのが難しかったようです。  &lt;/p&gt;
 
 &lt;p&gt;各球団、最近は、色々とファンサービスに力を入れているようですね。&lt;br&gt;
-同じユニフォーム配布系のイベントだと、ジャイアンツは橙魂、ホークスは鷹の祭典なんて名前みたいですね。&lt;br&gt;
+同じユニフォーム配布系のイベントだと、ジャイアンツは橙魂、ホークスは鷹の祭典なんて名前みたいです。&lt;br&gt;
 ドラゴンズは昇竜という名前のようですが、来年からは、スターナイトに習って、ドラゴンナイトというのはどうでしょうか？&lt;br&gt;
 ドラゴンナイトのキャッチコピーも考えてみました！  &lt;/p&gt;
 
@@ -37,15 +37,16 @@
 
 &lt;script src=&quot;https://gist.github.com/moni360/4e86ca676d1a7bd93cd5.js&quot;&gt; &lt;/script&gt;
 
-&lt;p&gt;各行を説明します。  &lt;/p&gt;
+&lt;p&gt;このバッチは、8〜47行目のNOWというサブルーチンの中で、YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDという変数に現在の日付と時刻が格納するようになっています。  &lt;/p&gt;
 
-&lt;p&gt;3行目でNOWというサブルーチンに入ります。&lt;br&gt;
-8〜47行目のサブルーチンの中で、YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDという変数に現在の日付と時刻が格納されるので、
-サブルーチンを抜けて4、5行目のechoで表示します。  &lt;/p&gt;
+&lt;p&gt;以下にサブルーチンを説明します。  &lt;/p&gt;
+
+&lt;h4&gt;PCの言語環境を判断する&lt;/h4&gt;
 
 &lt;p&gt;サブルーチンの11〜20行目では、日付のフォーマットから、PCの言語環境を判断します。&lt;br&gt;
 私の知っている限り、Windowsの日付のフォーマットは下表の4つがあります。&lt;br&gt;
-それぞれ、&amp;quot;/&amp;quot;の位置が異なるので、判断は&amp;quot;/&amp;quot;の位置で行うことにしました。  &lt;/p&gt;
+他にもあるかもしれませんが、私が仕事の中で当たるPCはこのぐらいしかないので、この4つだけ判別できればよしとします。&lt;br&gt;
+それぞれ、&amp;quot;/&amp;quot;の位置が異なるので、判断は&amp;quot;/&amp;quot;の位置で行うことにしています。  &lt;/p&gt;
 
 &lt;table&gt;
   &lt;caption&gt;日付のフォーマット&lt;/caption&gt;
@@ -91,13 +92,87 @@
 後ろから5文字目が&amp;quot;/&amp;quot;なら、英語(MM/DD/YYYYの並び)として、前から5文字目から最後までを切り出し、MM/DD/YYYYの部分だけを抽出します。&lt;br&gt;
 それ以外なら、英語(MM/DD/YYYYの並び)として、最後の4文字を除き、MM/DD/YYYYの部分だけを抽出します。  &lt;/p&gt;
 
-&lt;p&gt;22〜30行目で、日本語/英語で場合分けして、抽出した文字列（YYYY/MM/DDまたはMM/DD/YYYY）を切り出して、変数YEAR, MONTH, DAYに格納します。  &lt;/p&gt;
+&lt;h4&gt;日付を年、月、日に分けて変数に格納する&lt;/h4&gt;
 
-&lt;p&gt;32〜36行目では、時刻を取得します。&lt;br&gt;
+&lt;p&gt;ここまでで、YYYY/MM/DDまたはMM/DD/YYYYの文字列が抽出できていることになっています。&lt;br&gt;
+22〜30行目で、日本語/英語で場合分けして、抽出した文字列の一部をスライスして、変数YEAR, MONTH, DAYに格納します。  &lt;/p&gt;
+
+&lt;p&gt;一応、文字列のスライスの書式を下記の表にまとめます。  &lt;/p&gt;
+
+&lt;table&gt;
+  &lt;caption&gt;バッチの文字列のスライス&lt;/caption&gt;
+  &lt;colgroup&gt;
+  &lt;/colgroup&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;書式&lt;/th&gt;
+      &lt;th&gt;意味&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~m%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、m文字目以降&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~m,n%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、m文字目以降のn文字分&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~m,-n%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、m文字目以降の、後ろからn文字分を除去したもの&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~-m%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、後ろからm文字目以降&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~-m,n%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、後ろからm文字目以降のn文字分&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:~-m,-n%&lt;/td&gt;
+      &lt;td&gt;strという文字列の、後ろからm文字目以降の、後ろからn文字分を除去したもの&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h4&gt;時刻を時、分、秒、ミリ秒に分けて変数に格納する&lt;/h4&gt;
+
+&lt;p&gt;32〜36行目では、時刻を変数に格納します。&lt;br&gt;
 ポイントは、0~9時までは、&amp;quot; 9:00:00.00&amp;quot;のようにスペースが入るので、スペースを0で置換している点です。  &lt;/p&gt;
 
-&lt;p&gt;9行目でsetlocalを宣言し、サブルーチン内の変数をローカル変数としていたため、最後に38〜45行目で、endlocalの宣言と日付、時刻の切り出して格納した変数を外部で使用できるようにしています。&lt;br&gt;
-これで、外部からYEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDの変数が使用できるようになりました。  &lt;/p&gt;
+&lt;p&gt;置換は以下のように行います。  &lt;/p&gt;
+
+&lt;table&gt;
+  &lt;caption&gt;バッチの文字列の置換&lt;/caption&gt;
+  &lt;colgroup&gt;
+  &lt;/colgroup&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;書式&lt;/th&gt;
+      &lt;th&gt;意味&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;%str:x=y&lt;/td&gt;
+      &lt;td&gt;strという文字列の、文字xを文字yに置換&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h4&gt;ローカル変数の使用と、ローカル変数の外部への渡し方&lt;/h4&gt;
+
+&lt;p&gt;サブルーチン内で、意図せず同じ名前の変数を更新してしまわないように、ローカル変数を使用しています。&lt;br&gt;
+バッチでは、setlocal〜endlocalの間の変数は全てローカル変数扱いとなり、外部の変数に影響を与えません。  &lt;/p&gt;
+
+&lt;p&gt;しかし、最後に、サブルーチン内でローカル変数に格納した処理結果を、外部に渡す必要があります。&lt;br&gt;
+その場合は、下記のように記述します。&lt;br&gt;
+hogeの内容はsetlocal〜endlocalの外部では参照できませんが、endlocalに&amp;quot;&amp;amp;&amp;amp;&amp;quot;で続けて、外部から見ることができる変数fugaへの代入を行うことで、外部にhogeの内容を渡すことができます。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;setlocal
+set hoge=100
+endlocal &amp;amp;&amp;amp; set fuga=%hoge%
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;38〜45行目で、外部にYEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECONDの値を渡しています。  &lt;/p&gt;
 
 &lt;hr&gt;
 </description>
