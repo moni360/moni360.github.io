@@ -7,6 +7,78 @@
     <atom:link href="https://moni360.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>EdisonのFWアップデートでつまづいた話</title>
+        <description>&lt;hr&gt;
+
+&lt;p&gt;Intel® EdisonのFWをアップデートしたときにつまずいたので、その覚え書きです。  &lt;/p&gt;
+
+&lt;p&gt;先日、久しぶりにEdisonを起動した私は、とりあえずFWのアップデートをしようと思いました。&lt;br&gt;
+居酒屋にいったら「とりあえず生」、PCは久しぶりに起動したら「とりあえずアプデ」、これは良識ある社会人としてのマナーであることは、読者諸兄におかれましても十分にご存知のことかと思います。&lt;/p&gt;
+
+&lt;p&gt;まずは、Intelのサイトから、現時点の最新FWをダウンロードしました。&lt;br&gt;
+2015/9/12時点ではV2.1(weekly-159)が最新でした。  &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://software.intel.com/en-us/iot/hardware/edison/downloads&quot;&gt;Intel® Edison Board Software Downloads&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;次に、EdisonをMacにつないで、ディスクとして見える領域に、ダウンロードしたzipを解凍したものをそのままコピーしました。
+そして、シリアルでEdisonに接続して、&lt;code&gt;reboot ota&lt;/code&gt;実行。&lt;br&gt;
+これで全てうまくいく、この時まではそう考えていました…。&lt;/p&gt;
+
+&lt;p&gt;しかし、Edisonが何度か再起動し、終了したようなメッセージが出るものの、versionを確認（&lt;code&gt;cat /etc/version&lt;/code&gt;）しても変わっていない。。。&lt;/p&gt;
+
+&lt;p&gt;ネットで調べていると、こちらのBlogの内容が引っかかりました。  &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://workpiles.com/2015/07/intel-edison-setup2/&quot;&gt;Intel® Edisonを使ってみる−セットアップ編②（Firmwareアップデート）−&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;同じ方法で2.0にはアップデートできるが、2.1にはなぜかできないとのこと。&lt;br&gt;
+そして、記事の一番下に、追記として、flashall.shを使用してアップデートできたと書いてあるので、その通りにやってみました。  &lt;/p&gt;
+
+&lt;p&gt;しかし、これもなぜか失敗。&lt;br&gt;
+原因不明。しかも「このディスクはマウントできません」みたいなエラーが出てしまうようになりました。  &lt;/p&gt;
+
+&lt;p&gt;その後、何回かflashall.shを繰り返しましたが、アップデート中にEdisonの再起動を待つあたりで、以下のメッセージが出てくる。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;Timed out while waiting for dfu device 8087:0a99
+Did you plug and reboot your board?
+If yes, please try a recovery by calling this script with the --recovery option
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ということで、recoveryしてみました。&lt;br&gt;
+しかし、Macは対応してないゾ、と。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sudo ./flashall.sh --recovery
+Recovery mode is only available on windows and linux
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;しょうがないのでwindowsでrecoveryしてみることにしました。&lt;br&gt;
+すると、今度はxfstkがないゾ、と。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;flashall.bat --recovery
+You should install xfstk tools, please visit http://xfstk.sourceforge.net/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;そこでxfstkのページを見に行きましたが、ソースコードしか置いておらず。&lt;br&gt;
+Ubuntuでビルドしたという記事は見つかったのですが、linuxを入れてるPCないし、これクッソめんどくさそうだな…と私の心は折れかけました。  &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://communities.intel.com/message/257193&quot;&gt;Building xFSTK on Ubuntu 14.04 (32-bit) for flashing Edison&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;とりあえず、一縷の望みをかけて、オプション無しでflashall.batを叩いてみました。&lt;br&gt;
+すると、どうやらアップデートできたようです。&lt;br&gt;
+windowsのドライバからはディスクとして見えていたので、その辺が要因かも。  &lt;/p&gt;
+
+&lt;p&gt;Macに接続しなおして、一応、Flash Tool Liteを使ってアップデートしなおしておきました。&lt;br&gt;
+Flash Tool Liteの使い方は以下を参照。  &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://software.intel.com/en-us/articles/flash-tool-lite-user-manual&quot;&gt;FLASH TOOL LITE USER MANUAL&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cat /etc/version
+weekly-159
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;さて、アップデートできたものの、設定とか全て消えてしまったので、やり直さなくては。&lt;br&gt;
+まあ、こういうトラブルからスキルアップするものだと思うので、これも楽しいですよね。&lt;br&gt;
+それでは(^-^)/&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Sat, 12 Sep 2015 00:00:00 +0900</pubDate>
+        <link>https://moni360.github.io/blog/2015/09/edison-update/</link>
+        <guid isPermaLink="true">https://moni360.github.io/blog/2015/09/edison-update/</guid>
+      </item>
+    
+      <item>
         <title>バッチで日付と時刻を取得する</title>
         <description>&lt;hr&gt;
 
